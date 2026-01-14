@@ -127,10 +127,10 @@ If you are interested in licensing, collaboration, or technical discussion, init
 
 **Josef M. Drew**  
 Applied systems thinker  
-Background in emergency medicine, operations, and exploratory engineering
+Background in tactical emergency medicine, equities/asset management, and exploratory engineering
 
 Contact:  
-📧 josefmdrew@gmail.com
+📧 joe@inexio.io
 
 ---
 
@@ -139,5 +139,3 @@ Contact:
 neutralproton is not a product roadmap.  
 It is a **thinking surface**.
 
-If a system here appears obvious, it likely isn’t.  
-If it appears impossible, it may simply be incomplete.
