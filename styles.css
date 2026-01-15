@@ -1,0 +1,107 @@
+:root {
+  --bg: #0b0d10;
+  --fg: #e6e8eb;
+  --muted: #9aa0a6;
+  --accent: #c49a3a; /* tungsten amber */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.spine {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+}
+
+.panel {
+  flex: 0 0 100vw;
+  height: 100vh;
+  padding: 4rem;
+  scroll-snap-align: start;
+  overflow-y: auto;
+}
+
+h1, h2, h3, h4 {
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.3rem;
+  color: var(--muted);
+}
+
+h4 {
+  margin-top: 2rem;
+  font-size: 1.1rem;
+  color: var(--accent);
+}
+
+p {
+  max-width: 720px;
+  line-height: 1.6;
+}
+
+.lead {
+  font-size: 1.2rem;
+  color: var(--muted);
+}
+
+.subtitle {
+  font-style: italic;
+  color: var(--muted);
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul li::before {
+  content: "— ";
+  color: var(--accent);
+}
+
+.diagram {
+  margin: 3rem 0;
+  max-width: 480px;
+}
+
+lottie-player {
+  width: 100%;
+  height: auto;
+}
+
+.footer {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.boundary {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+}
+

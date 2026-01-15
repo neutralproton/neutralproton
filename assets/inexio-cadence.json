@@ -1,0 +1,12 @@
+cat > assets/inexio-cadence.json << 'EOF'
+{
+  "v": "5.7.4",
+  "fr": 30,
+  "ip": 0,
+  "op": 300,
+  "w": 400,
+  "h": 800,
+  "layers": []
+}
+EOF
+
