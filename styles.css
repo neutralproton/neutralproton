@@ -15,12 +15,11 @@ html, body {
   overflow-x: auto;
   overflow-y: hidden;
 }
-
 /* ===== Horizontal Track ===== */
 .horizontal-track {
   display: flex;
   flex-direction: row;
-  width: max-content;
+  width: 600vw;
   height: 100vh;
 }
 
