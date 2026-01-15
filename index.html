@@ -4,110 +4,172 @@
   <meta charset="UTF-8" />
   <title>neutralproton</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Lottie -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+
   <link rel="stylesheet" href="styles.css" />
-
-  <!-- Lottie Player -->
-  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </head>
-
 <body>
-  <main class="spine">
 
-    <!-- PANEL: INTRO -->
-    <section class="panel">
-      <h1>neutralproton</h1>
-      <p class="lead">
-        Mechanism-first system exploration under physical, cognitive, and economic constraint.
+<div class="horizontal-track">
+
+  <!-- ===================== -->
+  <!-- INTRO / FRAME -->
+  <!-- ===================== -->
+  <section class="panel intro">
+    <h1>neutralproton</h1>
+    <p class="subtitle">
+      Exploratory systems at the boundary of human physiology, energy, and infrastructure.
+    </p>
+    <p class="note">
+      This site presents conceptual engineering systems intended for technical discussion.
+      Claims are limited to mechanistic plausibility. No guarantees are implied.
+    </p>
+  </section>
+
+  <!-- ===================== -->
+  <!-- INEXIO -->
+  <!-- ===================== -->
+  <section class="panel project">
+    <h2>inexio</h2>
+    <p class="tagline">
+      Passive stabilization of respiratory rhythm using distributed tactile phase fields.
+    </p>
+
+    <div class="lottie-container" id="inexio-lottie"></div>
+
+    <p>
+      inexio is a closed-loop system that estimates respiratory rhythm stability using motion-derived
+      proxies and introduces a non-instructional, phase-biased tactile signal to reduce rhythm volatility
+      over time.
+    </p>
+
+    <details>
+      <summary>Explore in depth</summary>
+      <p>
+        The system avoids explicit breathing instructions, visual pacing, or auditory cues.
+        Instead, it computes a Respiratory Rhythm Volatility Index (RRVI) derived from inertial
+        motion features such as cycle variance, phase jitter, and asymmetry.
       </p>
       <p>
-        neutralproton is a technical observatory documenting exploratory systems that bias unstable
-        processes toward coherence without brute force, instruction, or dominance.
+        When sustained instability is detected, a distributed haptic field is generated across
+        multiple actuators embedded in a necklace form factor. The tactile signal exhibits lower
+        volatility than the detected rhythm and propagates spatially in a phase-biased manner
+        aligned with inhale, hold, and exhale phases.
       </p>
       <p>
-        Projects presented here are incomplete by design.<br />
-        Failure modes are exposed.<br />
-        Constraints are defining.
+        As rhythm stability improves, intervention magnitude is reduced. The system is not
+        diagnostic, not instructional, and not a medical treatment device.
       </p>
-    </section>
+    </details>
+  </section>
 
-    <!-- PANEL: EVALUATION MODEL -->
-    <section class="panel">
-      <h2>How Systems Are Evaluated</h2>
-      <ul>
-        <li>Identify an unstable or lossy system</li>
-        <li>Avoid direct force or optimization</li>
-        <li>Introduce a biasing structure</li>
-        <li>Observe directional change</li>
-        <li>Reduce intervention as stability improves</li>
-        <li>Abandon when constraints dominate signal</li>
-      </ul>
-      <p>No project is protected from termination.</p>
-    </section>
+  <!-- ===================== -->
+  <!-- CRYOFLUX -->
+  <!-- ===================== -->
+  <section class="panel project">
+    <h2>CryoFlux</h2>
+    <p class="tagline">
+      Modular thermal buffering using inert working gas circulation.
+    </p>
 
-    <!-- PANEL: INEXIO -->
-    <section class="panel">
-      <h2>inexio</h2>
-      <h3>Passive Respiratory Rhythm Stabilization</h3>
+    <div class="diagram-placeholder">
+      (CryoFlux flow animation placeholder)
+    </div>
 
-      <p class="subtitle">
-        Systems and Methods for Passive Stabilization of Respiratory Rhythm Using Distributed Tactile Phase Fields
-      </p>
+    <p>
+      CryoFlux is a conceptual thermal management system that uses inert working gas circulation
+      within a sealed modular block to absorb, redistribute, and reject heat without electricity,
+      liquid coolant, or ice generation.
+    </p>
 
+    <details>
+      <summary>Explore in depth</summary>
       <p>
-        inexio is a closed-loop human–machine interaction system that stabilizes respiratory rhythm
-        volatility through non-instructional, spatially distributed tactile entrainment.
+        Heat input enters the system via conduction into a structured internal lattice.
+        An inert working gas undergoes controlled pressure and density changes as it traverses
+        the module, transporting thermal energy toward a passive rejection surface.
       </p>
-
       <p>
-        The system does not guide breathing.<br />
-        It does not issue commands.<br />
-        It establishes a tactile phase field that the body subconsciously entrains to.
+        The architecture is explicitly non-cryogenic and avoids phase-change materials,
+        pumps, compressors, or active control systems. All operation is driven by thermal
+        gradients and internal geometry.
       </p>
-
-      <!-- LOTTIE DIAGRAM -->
-      <div class="diagram">
-        <lottie-player
-          src="assets/inexio-cadence.json"
-          background="transparent"
-          speed="1"
-          loop
-          autoplay>
-        </lottie-player>
-      </div>
-
-      <h4>Respiratory Rhythm Volatility Index (RRVI)</h4>
-
       <p>
-        Respiratory stability is evaluated using a motion-derived volatility metric computed over
-        rolling windows.
+        CryoFlux exists as a venture-scale exploration of whether modular, gas-mediated
+        thermal buffering can reduce reliance on electrically powered cooling in constrained
+        environments.
       </p>
+    </details>
+  </section>
 
+  <!-- ===================== -->
+  <!-- ULTRASONIC SOLAR -->
+  <!-- ===================== -->
+  <section class="panel project">
+    <h2>Ultrasonic Solar</h2>
+    <p class="tagline">
+      Photovoltaic augmentation via mechanically coupled ultrasonic excitation.
+    </p>
+
+    <div class="diagram-placeholder">
+      (Ultrasonic Solar excitation animation placeholder)
+    </div>
+
+    <p>
+      Ultrasonic Solar is a photovoltaic augmentation concept that applies low-amplitude,
+      high-frequency mechanical excitation to the underside of conventional solar panels.
+      The system is designed as a retrofit layer, not a replacement architecture.
+    </p>
+
+    <details>
+      <summary>Explore in depth</summary>
       <p>
-        RRVI reflects rhythm stability, not rate, correctness, or optimality.
+        One or more ultrasonic transducers are mechanically coupled to the panel undercarriage,
+        with diffusion rods assisting in even propagation of excitation across the substrate.
       </p>
-
       <p>
-        When sustained volatility exceeds adaptive thresholds, tactile intervention is introduced.
-        As RRVI decreases, intervention magnitude is reduced. When stability is restored,
-        intervention may cease entirely.
+        The excitation is intended to explore two effects: qualitative interaction with charge
+        transport pathways and continuous surface agitation that discourages particulate adhesion.
       </p>
-    </section>
-
-    <!-- FOOTER -->
-    <section class="panel footer">
       <p>
-        Concepts and systems documented by Josef M. Drew.
+        The project explicitly avoids claims of guaranteed efficiency gain. Evaluation is framed
+        as a qualitative balance between energy input and recovered output, pending technical
+        validation.
       </p>
-      <p class="boundary">
-        All projects presented are exploratory system models. No claims of readiness, performance,
-        or efficacy are made.
+    </details>
+  </section>
+
+  <!-- ===================== -->
+  <!-- MUSCLEOS -->
+  <!-- ===================== -->
+  <section class="panel project">
+    <h2>muscleOS</h2>
+    <p class="tagline">
+      Set-by-set adaptive training intelligence from subjective effort signals.
+    </p>
+
+    <p>
+      muscleOS is a fitness analytics concept that learns from self-reported effort, repetition
+      count, and time to model individualized adaptation patterns over repeated training sessions.
+    </p>
+
+    <details>
+      <summary>Explore in depth</summary>
+      <p>
+        Rather than prescribing programs, muscleOS observes how users experience training.
+        Over time, it identifies patterns between perceived effort, performance decay,
+        and recovery behavior.
       </p>
-    </section>
+      <p>
+        These learned patterns can be integrated into future training suggestions,
+        load adjustments, or recovery pacing, enabling workouts that improve without
+        rigid programming or external coaching dependency.
+      </p>
+    </details>
+  </section>
 
-  </main>
-
-  <script src="script.js"></script>
-</body>
-</html>
-
+  <!-- ===================== -->
+  <!-- R
 
