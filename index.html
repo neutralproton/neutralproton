@@ -1,175 +1,1133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>neutralproton</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neutral Proton</title>
+    <style>
+        :root {
+            --bg-top: #0B1324;
+            --bg-bottom: #0E1118;
+            --accent: #5FA8B8;
+            --text-primary: #D1D5DB;
+            --text-secondary: #9CA3AF;
+            --text-muted: #4B5563;
+            --border: #1F2937;
+            --card-bg: rgba(17, 24, 39, 0.4);
+            --lattice-opacity: 0.15;
+        }
 
-  <!-- Lottie -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+        body.light-mode {
+            --bg-top: #F9FAFB;
+            --bg-bottom: #F3F4F6;
+            --accent: #458B99;
+            --text-primary: #111827;
+            --text-secondary: #374151;
+            --text-muted: #9CA3AF;
+            --border: #E5E7EB;
+            --card-bg: rgba(255, 255, 255, 0.6);
+            --lattice-opacity: 0.08;
+        }
 
-  <link rel="stylesheet" href="styles.css" />
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(to bottom, var(--bg-top), var(--bg-bottom));
+            color: var(--text-primary);
+            line-height: 1.5;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            transition: background 0.3s ease;
+        }
+
+        /* Connected Lattice Background with highlight gradient */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66ZM28 66L28 100' fill='none' stroke='%235FA8B8' stroke-width='0.5'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            mask-image: linear-gradient(to right, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.02) 50%, rgba(0,0,0,0.08) 100%);
+            -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.02) 50%, rgba(0,0,0,0.08) 100%);
+            z-index: 1;
+            pointer-events: none;
+            opacity: var(--lattice-opacity);
+            transition: opacity 0.3s ease;
+        }
+
+        /* System Controls (Top Right) */
+        #system-controls {
+            position: fixed;
+            top: 1.5rem;
+            right: 2rem;
+            display: flex;
+            gap: 1.5rem;
+            z-index: 2000;
+            align-items: center;
+        }
+
+        .control-group {
+            display: flex;
+            background: rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .control-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.4rem 0.8rem;
+            font-size: 0.65rem;
+            text-transform: lowercase;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-right: 1px solid var(--border);
+        }
+
+        .control-btn:last-child {
+            border-right: none;
+        }
+
+        .control-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .control-btn.active {
+            background: var(--accent);
+            color: white;
+            border-right-color: var(--accent);
+        }
+
+        main {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            transition: max-width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Simulation Widths */
+        body.view-desktop main { max-width: 1200px; }
+        body.view-tablet main { max-width: 768px; border-left: 1px solid var(--border); border-right: 1px solid var(--border); background: var(--bg-top); }
+        body.view-mobile main { max-width: 375px; border-left: 1px solid var(--border); border-right: 1px solid var(--border); background: var(--bg-top); }
+
+        /* Top Navigation */
+        nav {
+            display: flex;
+            justify-content: flex-start;
+            gap: 2rem;
+            padding: 2rem 0;
+            font-size: 0.875rem;
+            text-transform: lowercase;
+            letter-spacing: 0.05em;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--accent);
+        }
+
+        /* Hero Section */
+        #hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8rem 0;
+            gap: 4rem;
+        }
+
+        .hero-content {
+            flex: 1.2;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 3.5rem;
+        }
+
+        .btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 0.85rem 1.5rem;
+            font-size: 0.75rem;
+            text-transform: lowercase;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .hero-graphic {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0.7;
+        }
+
+        /* Complex Vortex Graphic - Explicit Transparency */
+        .vortex-path, .vortex-path-inner {
+            stroke: var(--accent);
+            stroke-width: 0.8;
+            fill: none !important;
+            stroke-linecap: round;
+        }
+        .vortex-path-inner {
+            stroke-opacity: 0.4;
+            stroke-width: 0.4;
+        }
+
+        /* Projects Row */
+        #projects-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1px;
+            background-color: var(--border);
+            border: 1px solid var(--border);
+            margin-bottom: 4rem;
+        }
+
+        .project-card {
+            background: var(--bg-top);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            transition: background 0.2s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .project-card:hover {
+            background: rgba(95, 168, 184, 0.05);
+        }
+
+        .project-card.active {
+            border-bottom-color: var(--accent);
+            background: rgba(95, 168, 184, 0.03);
+        }
+
+        .project-name {
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            letter-spacing: 0.02em;
+        }
+
+        .project-function {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            min-height: 3.5rem;
+        }
+
+        .status-tag {
+            font-size: 0.6rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-top: auto;
+            opacity: 0.8;
+        }
+
+        /* Project Detail Area - Vertical Scroll */
+        #detail-area {
+            min-height: 400px;
+            padding: 6rem 0;
+            border-top: 1px solid var(--border);
+            max-height: 1200px;
+            overflow-y: auto;
+        }
+
+        .acknowledgement {
+            font-size: 0.75rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            height: 1.5rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-family: monospace;
+        }
+
+        .acknowledgement.visible {
+            opacity: 1;
+        }
+
+        .detail-content {
+            max-width: 750px;
+        }
+
+        .detail-title {
+            font-size: 2.25rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .detail-descriptor {
+            color: var(--text-secondary);
+            margin-bottom: 4rem;
+            font-style: italic;
+            font-size: 0.95rem;
+        }
+
+        .detail-section {
+            margin-bottom: 3rem;
+        }
+
+        .detail-section h3 {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .detail-section p, .detail-section ul {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.25rem;
+            white-space: pre-wrap;
+        }
+
+        .detail-section ul {
+            list-style: none;
+        }
+
+        .detail-section li {
+            margin-bottom: 0.75rem;
+            display: flex;
+        }
+
+        .detail-section li::before {
+            content: "—";
+            margin-right: 1rem;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        .empty-state {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            text-align: center;
+            padding-top: 4rem;
+            text-transform: lowercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Collaboration Section */
+        #collaboration {
+            padding: 10rem 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .collab-header {
+            font-size: 0.75rem;
+            text-transform: lowercase;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.1em;
+        }
+
+        .collab-body {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            max-width: 550px;
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        /* Footer */
+        footer {
+            padding: 6rem 0 4rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: center;
+            letter-spacing: 0.02em;
+        }
+
+        /* Drawer System */
+        .drawer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 450px;
+            height: 100vh;
+            background: var(--bg-top);
+            border-left: 1px solid var(--border);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 4rem 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            box-shadow: -20px 0 60px rgba(0,0,0,0.5);
+        }
+
+        .drawer.open {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .drawer-label {
+            font-size: 0.7rem;
+            text-transform: lowercase;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+        }
+
+        .collapse-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            text-transform: lowercase;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .collapse-btn:hover {
+            color: var(--accent);
+        }
+
+        .drawer-input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .drawer-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-primary);
+            font-size: 1.75rem;
+            padding: 0.75rem 0;
+            outline: none;
+            width: 100%;
+            font-weight: 300;
+        }
+
+        .drawer-input:focus {
+            border-bottom-color: var(--accent);
+        }
+
+        .invalid-msg {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-family: monospace;
+        }
+
+        .invalid-msg.visible {
+            opacity: 1;
+        }
+
+        .drawer-content {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .drawer-footer {
+            margin-top: auto;
+        }
+
+        @media (max-width: 1024px) {
+            #projects-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            #hero {
+                flex-direction: column;
+                padding: 4rem 0;
+                text-align: left;
+            }
+            .hero-graphic {
+                max-width: 300px;
+                margin-top: 2rem;
+            }
+            #projects-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .drawer {
+                width: 100%;
+                height: auto;
+                bottom: 0;
+                top: auto;
+                border-left: none;
+                border-top: 1px solid var(--border);
+                transform: translateY(100%);
+                padding: 3rem 2rem;
+                box-shadow: 0 -20px 60px rgba(0,0,0,0.5);
+            }
+            .drawer.open {
+                transform: translateY(0);
+            }
+            #system-controls {
+                right: 1rem;
+                top: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #projects-grid {
+                grid-template-columns: 1fr;
+            }
+            h1 { font-size: 2.25rem; }
+            #system-controls {
+                gap: 0.5rem;
+            }
+        }
+    </style>
 </head>
-<body>
+<body class="view-desktop">
 
-<div class="horizontal-track">
-
-  <!-- ===================== -->
-  <!-- INTRO / FRAME -->
-  <!-- ===================== -->
-  <section class="panel intro">
-    <h1>neutralproton</h1>
-    <p class="subtitle">
-      Exploratory systems at the boundary of human physiology, energy, and infrastructure.
-    </p>
-    <p class="note">
-      This site presents conceptual engineering systems intended for technical discussion.
-      Claims are limited to mechanistic plausibility. No guarantees are implied.
-    </p>
-  </section>
-
-  <!-- ===================== -->
-  <!-- INEXIO -->
-  <!-- ===================== -->
-  <section class="panel project">
-    <h2>inexio</h2>
-    <p class="tagline">
-      Passive stabilization of respiratory rhythm using distributed tactile phase fields.
-    </p>
-
-    <div class="lottie-container" id="inexio-lottie"></div>
-
-    <p>
-      inexio is a closed-loop system that estimates respiratory rhythm stability using motion-derived
-      proxies and introduces a non-instructional, phase-biased tactile signal to reduce rhythm volatility
-      over time.
-    </p>
-
-    <details>
-      <summary>Explore in depth</summary>
-      <p>
-        The system avoids explicit breathing instructions, visual pacing, or auditory cues.
-        Instead, it computes a Respiratory Rhythm Volatility Index (RRVI) derived from inertial
-        motion features such as cycle variance, phase jitter, and asymmetry.
-      </p>
-      <p>
-        When sustained instability is detected, a distributed haptic field is generated across
-        multiple actuators embedded in a necklace form factor. The tactile signal exhibits lower
-        volatility than the detected rhythm and propagates spatially in a phase-biased manner
-        aligned with inhale, hold, and exhale phases.
-      </p>
-      <p>
-        As rhythm stability improves, intervention magnitude is reduced. The system is not
-        diagnostic, not instructional, and not a medical treatment device.
-      </p>
-    </details>
-  </section>
-
-  <!-- ===================== -->
-  <!-- CRYOFLUX -->
-  <!-- ===================== -->
-  <section class="panel project">
-    <h2>CryoFlux</h2>
-    <p class="tagline">
-      Modular thermal buffering using inert working gas circulation.
-    </p>
-
-    <div class="diagram-placeholder">
-      (CryoFlux flow animation placeholder)
+    <div id="system-controls">
+        <div class="control-group">
+            <button class="control-btn active" onclick="setView('desktop', this)">desk</button>
+            <button class="control-btn" onclick="setView('tablet', this)">tab</button>
+            <button class="control-btn" onclick="setView('mobile', this)">mob</button>
+        </div>
+        <div class="control-group">
+            <button class="control-btn active" onclick="setTheme('dark', this)">dark</button>
+            <button class="control-btn" onclick="setTheme('light', this)">light</button>
+        </div>
     </div>
 
-    <p>
-      CryoFlux is a conceptual thermal management system that uses inert working gas circulation
-      within a sealed modular block to absorb, redistribute, and reject heat without electricity,
-      liquid coolant, or ice generation.
-    </p>
+    <main>
+        <nav>
+            <a href="#projects-grid" id="nav-projects">projects</a>
+            <a href="#collaboration" id="nav-collab">collaboration</a>
+        </nav>
 
-    <details>
-      <summary>Explore in depth</summary>
-      <p>
-        Heat input enters the system via conduction into a structured internal lattice.
-        An inert working gas undergoes controlled pressure and density changes as it traverses
-        the module, transporting thermal energy toward a passive rejection surface.
-      </p>
-      <p>
-        The architecture is explicitly non-cryogenic and avoids phase-change materials,
-        pumps, compressors, or active control systems. All operation is driven by thermal
-        gradients and internal geometry.
-      </p>
-      <p>
-        CryoFlux exists as a venture-scale exploration of whether modular, gas-mediated
-        thermal buffering can reduce reliance on electrically powered cooling in constrained
-        environments.
-      </p>
-    </details>
-  </section>
+        <section id="hero">
+            <div class="hero-content">
+                <h1>Neutral Proton</h1>
+                <p class="subtitle">Applied speculation. Functional systems.</p>
+                <p class="subtitle">Bridging theoretical curiosity and deployable mechanisms.</p>
+                <div class="hero-buttons">
+                    <button class="btn" onclick="scrollToSection('projects-grid')">View Projects</button>
+                    <button class="btn" onclick="openCollabDrawer()">Collaboration Overview</button>
+                </div>
+            </div>
+            <div class="hero-graphic">
+                <svg width="400" height="400" viewBox="-100 -100 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <g id="vortex">
+                        <script>
+                            const vortex = document.currentScript.parentElement;
+                            for(let i=0; i<45; i++) {
+                                const angle = i * 8.5;
+                                const scale = 1.0 - (i * 0.02);
+                                const opacity = 1.0 - (i * 0.02);
+                                const dash = (i % 3 === 0) ? "15, 10" : (i % 2 === 0 ? "5, 5" : "none");
+                                
+                                const hex = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+                                const points = [];
+                                for(let j=0; j<6; j++) {
+                                    const a = (j * 60) * Math.PI / 180;
+                                    const r = 90 * scale;
+                                    points.push(`${r * Math.cos(a)},${r * Math.sin(a)}`);
+                                }
+                                hex.setAttribute("points", points.join(" "));
+                                // Explicitly ensure no fill to keep graphic transparent over background
+                                hex.setAttribute("fill", "none");
+                                hex.setAttribute("class", i > 20 ? "vortex-path-inner" : "vortex-path");
+                                hex.setAttribute("transform", `rotate(${angle})`);
+                                hex.style.strokeOpacity = opacity * 0.8;
+                                hex.style.strokeDasharray = dash;
+                                vortex.appendChild(hex);
+                            }
+                        </script>
+                        <polygon points="-10,-17.3 10,-17.3 20,0 10,17.3 -10,17.3 -20,0" fill="none" stroke="#5FA8B8" stroke-width="0.5" stroke-opacity="0.8"/>
+                    </g>
+                </svg>
+            </div>
+        </section>
 
-  <!-- ===================== -->
-  <!-- ULTRASONIC SOLAR -->
-  <!-- ===================== -->
-  <section class="panel project">
-    <h2>Ultrasonic Solar</h2>
-    <p class="tagline">
-      Photovoltaic augmentation via mechanically coupled ultrasonic excitation.
-    </p>
+        <section id="projects-grid">
+            <!-- Project cards will be populated by JS -->
+        </section>
 
-    <div class="diagram-placeholder">
-      (Ultrasonic Solar excitation animation placeholder)
+        <section id="detail-area">
+            <div id="ack-container" class="acknowledgement"></div>
+            <div id="content-container" class="detail-content">
+                <div class="empty-state">Select a system for analysis.</div>
+            </div>
+        </section>
+
+        <section id="collaboration">
+            <h2 class="collab-header">collaboration</h2>
+            <p class="collab-body">Structured inquiry for licensing, research collaboration, or technical critique.</p>
+            <button class="btn" onclick="openCollabDrawer()">structured inquiry</button>
+        </section>
+
+        <footer>
+            “neutralproton is potential energy. Partnership is the moment it becomes kinetic.”
+        </footer>
+    </main>
+
+    <!-- Access Drawer -->
+    <div id="access-drawer" class="drawer">
+        <div class="drawer-header">
+            <div class="drawer-label">enter access word</div>
+            <button class="collapse-btn" onclick="closeDrawer('access-drawer')">collapse</button>
+        </div>
+        <div class="drawer-input-container">
+            <input type="text" id="access-input" class="drawer-input" placeholder="..." autocomplete="off">
+            <div id="invalid-msg" class="invalid-msg">invalid</div>
+        </div>
+        <div class="drawer-footer">
+            <button class="btn" id="submit-access" style="width: 100%;">Execute</button>
+        </div>
     </div>
 
-    <p>
-      Ultrasonic Solar is a photovoltaic augmentation concept that applies low-amplitude,
-      high-frequency mechanical excitation to the underside of conventional solar panels.
-      The system is designed as a retrofit layer, not a replacement architecture.
-    </p>
+    <!-- Collaboration Drawer -->
+    <div id="collab-drawer" class="drawer">
+        <div class="drawer-header">
+            <div class="drawer-label">collaboration inquiry</div>
+            <button class="collapse-btn" onclick="closeDrawer('collab-drawer')">collapse</button>
+        </div>
+        <div class="drawer-content">
+            <p style="margin-bottom: 2rem;">Neutral Proton facilitates engagement through structured inquiry for licensing, research collaboration, or technical critique.</p>
+            <p style="color: var(--text-muted); font-size: 0.8rem;">Direct communication channel: joe@inexio.io</p>
+        </div>
+        <div class="drawer-footer">
+            <button class="btn" style="width: 100%; border-color: var(--accent); color: var(--accent);" onclick="triggerEmail()">contact founder</button>
+        </div>
+    </div>
 
-    <details>
-      <summary>Explore in depth</summary>
-      <p>
-        One or more ultrasonic transducers are mechanically coupled to the panel undercarriage,
-        with diffusion rods assisting in even propagation of excitation across the substrate.
-      </p>
-      <p>
-        The excitation is intended to explore two effects: qualitative interaction with charge
-        transport pathways and continuous surface agitation that discourages particulate adhesion.
-      </p>
-      <p>
-        The project explicitly avoids claims of guaranteed efficiency gain. Evaluation is framed
-        as a qualitative balance between energy input and recovered output, pending technical
-        validation.
-      </p>
-    </details>
-  </section>
+    <script>
+        const projects = [
+            {
+                id: 'inexio',
+                name: 'inexio',
+                descriptor: 'Closed-Loop Respiratory Rhythm Stabilization',
+                oneLine: 'Closed-loop human–machine interaction system that stabilizes respiratory rhythm volatility.',
+                status: 'provisional',
+                ack: 'system view enabled / state: provisional',
+                content: `
+                    <div class="detail-section">
+                        <h3>What it is</h3>
+                        <p>inexio is a closed-loop human–machine interaction system that stabilizes respiratory rhythm volatility through phase-biased tactile entrainment.</p>
+                        <p>The system does not instruct breathing.</p>
+                        <p>It does not issue commands.</p>
+                        <p>It establishes a tactile phase field that the body subconsciously entrains to.</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>How it works</h3>
+                        <p><strong>Motion-Derived Rhythm Estimation</strong></p>
+                        <p>Inertial motion data correlated with chest-wall movement is used to extract cyclic respiratory structure without measuring airflow, gas exchange, or physiological biomarkers.</p>
+                        <p>Signal preprocessing identifies phase timing, asymmetry, dispersion, and temporal variance while attenuating non-respiratory artifacts.</p>
+                        <p><strong>Respiratory Rhythm Volatility Index (RRVI)</strong></p>
+                        <p>The system computes a composite volatility metric representing rhythm instability over a rolling window.</p>
+                        <p>RRVI evaluates stability, not rate, correctness, or optimality. No ideal breathing pattern is defined or enforced.</p>
+                        <p><strong>Phase-Biased Tactile Field</strong></p>
+                        <p>When sustained volatility exceeds adaptive thresholds, a low-amplitude tactile signal is introduced.</p>
+                        <p>The signal:</p>
+                        <p>has lower volatility than the detected rhythm</p>
+                        <p>is phase-biased toward increased regularity</p>
+                        <p>propagates spatially across multiple haptic nodes anchored at the sternum</p>
+                        <p>Rather than directing behavior, the system establishes a stable tactile reference field that the nervous system may entrain to.</p>
+                        <p><strong>Closed-Loop Adaptation</strong></p>
+                        <p>As volatility decreases, tactile intervention magnitude is reduced.</p>
+                        <p>When stability is restored, intervention may diminish or cease.</p>
+                        <p>The loop re-engage only upon renewed instability.</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Why it exists</h3>
+                        <p>Respiratory rhythm degrades under stress because attention fails.</p>
+                        <p>Instructional and symbolic guidance increases cognitive load and degrades compliance.</p>
+                        <p>inexio biases respiratory rhythm toward stability without requiring attention, interpretation, or conscious control.</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Current state</h3>
+                        <ul>
+                            <li>Closed-loop control logic defined</li>
+                            <li>Motion-derived volatility metric specified</li>
+                            <li>Phase-biased tactile field model articulated</li>
+                            <li>Provisional patent filing prepared</li>
+                        </ul>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Failure conditions</h3>
+                        <ul>
+                            <li>No sustained reduction in RRVI relative to baseline</li>
+                            <li>Habituation eliminates entrainment effect</li>
+                            <li>Tactile output exceeds comfort thresholds</li>
+                            <li>Environmental motion overwhelms respiratory signal extraction</li>
+                        </ul>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Boundary</h3>
+                        <p>inexio is not:</p>
+                        <p>a diagnostic device</p>
+                        <p>a biofeedback display</p>
+                        <p>a guided breathing trainer</p>
+                        <p>a medical treatment system</p>
+                        <p>These exclusions are intentional and defining.</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Visual note</h3>
+                        <p>Conceptual diagrams illustrate signal propagation only. Final hardware form factors and haptic patterns remain under exploration.</p>
+                    </div>
+                `
+            },
+            {
+                id: 'cryoflux',
+                name: 'CryoFlux',
+                descriptor: 'Passive Cryogenic Phase-Change Thermal Rectifier',
+                oneLine: 'Thermal system sustaining localized freezing by redistributing ambient heat through internal pressure routing.',
+                status: 'exploratory',
+                ack: 'internal research view enabled / state: exploratory',
+                content: `
+                    <div class="detail-section">
+                        <h3>What it is</h3>
+                        <p>CryoFlux is a thermal system characterized by the following properties:</p>
+                        <p>passive</p>
+                        <p>internally rectified</p>
+                        <p>phase change–driven</p>
+                        <p>thermal oscillator</p>
+                        <p>The system sustains localized freezing by redistributing ambient heat through internal pressure routing and phase-dependent flow behavior.</p>
+                        <p>It operates without electricity, compressors, or active control.</p>
+                        <p>Thermal behavior emerges from internal geometry, material expansion, and phase change.</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>How it works</h3>
+                        <p><strong>Internally Rectified Pressure Architecture</strong></p>
+                        <p>CryoFlux consists of a sealed block containing multiple internal pressure chambers connected by a directional flow corridor.</p>
+                        <p>That corridor incorporates a gradient of one-way valves whose effective behavior varies with temperature and phase state.</p>
+                        <p>A working gas is introduced once at initialization.</p>
+                        <p><strong>Phase-Dependent Flow and Cooling</strong></p>
+                        <p>During depressurization events, gas preferentially flows forward through the valve gradient.</p>
+                        <p>Rapid expansion induces localized cooling and freezing on high-surface-area ferrous structures.</p>
+                        <p>As regions freeze or thaw:</p>
+                        <p>material contraction suppresses backflow when frozen</p>
+                        <p>expansion re-enables flow when thawed</p>
+                        <p>This creates directional hysteresis.</p>
+                        <p>The system does not retrace the same thermal state path during freeze and thaw.</p>
+                        <p><strong>Environmental Coupling</strong></p>
+                        <p>CryoFlux is thermally coupled to its environment.</p>
+                        <p>Ambient conditions act as both:</p>
+                        <p>heat source</p>
+                        <p>heat sink</p>
+                        <p>The system does not create energy.</p>
+                        <p>It redistributes heat internally to bias where freezing persists.</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Why it exists</h3>
+                        <p>Most ice generation and cooling systems depend on active refrigeration, electrical power, or consumable coolants.</p>
+                        <p>CryoFlux explores whether internal pressure routing and phase-dependent flow can bias heat redistribution passively, allowing persistent cold zones without continuous external energy input.</p>
+                        <p>The objective is not refrigeration, but rectification.</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Current state</h3>
+                        <ul>
+                            <li>Conceptual system architecture defined</li>
+                            <li>Valve-gradient mechanism articulated</li>
+                            <li>Phase-dependent hysteresis identified</li>
+                            <li>No physical prototypes constructed</li>
+                        </ul>
+                        <p>Key unknowns include:</p>
+                        <p>net thermal performance</p>
+                        <p>long-term material fatigue</p>
+                        <p>stability under varying ambient envelopes</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Failure conditions</h3>
+                        <ul>
+                            <li>Environmental envelope too narrow to sustain cycling</li>
+                            <li>Full system freeze halts internal flow</li>
+                            <li>Rapid equilibration collapses pressure gradients</li>
+                            <li>Material fatigue degrades valve behavior</li>
+                        </ul>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Boundary</h3>
+                        <p>CryoFlux is not:</p>
+                        <p>a refrigerator</p>
+                        <p>a heat pump</p>
+                        <p>a perpetual cooling device</p>
+                        <p>It is a passive, environmentally coupled phase-change system that redistributes thermal energy internally until equilibrium is reached.</p>
+                    </div>
+                `
+            },
+            {
+                id: 'ultrasonic-solar',
+                name: 'Ultrasonic Solar',
+                descriptor: 'Photovoltaic Surface-Level Loss Mitigation',
+                oneLine: 'Solid-state photovoltaic augmentation concept applying controlled ultrasonic excitation to panel undersides.',
+                status: 'research',
+                ack: 'pre-validation view enabled / state: research',
+                content: `
+                    <div class="detail-section">
+                        <h3>What it is</h3>
+                        <p>Ultrasonic Solar is a solid-state photovoltaic augmentation concept characterized by the following properties:</p>
+                        <p>additive</p>
+                        <p>solid-state</p>
+                        <p>ultrasonically excited</p>
+                        <p>non-intrusive</p>
+                        <p>The system applies controlled ultrasonic excitation to the underside of conventional photovoltaic panels to explore performance modulation and surface-level loss mitigation.</p>
+                        <p>It does not replace photovoltaic chemistry or panel architecture.</p>
+                        <p>It operates as an auxiliary layer.</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>How it works</h3>
+                        <p><strong>Underside Ultrasonic Excitation</strong></p>
+                        <p>One or more ultrasonic transducers are mechanically coupled to the underside or frame of a photovoltaic panel.</p>
+                        <p>The transducers introduce low-amplitude, high-frequency mechanical excitation into the panel substrate while normal light-driven generation occurs.</p>
+                        <p><strong>Dual-Mechanism Framing</strong></p>
+                        <p>The excitation serves two parallel roles:</p>
+                        <p>Electrical interaction (primary uncertainty): Mechanical vibration may influence charge carrier behavior, lattice interactions, or boundary-level loss mechanisms within solid-state photovoltaic materials.</p>
+                        <p>Mechanical surface agitation (lower risk): Continuous micro-vibration reduces static adhesion forces, increasing the likelihood that dry particulate matter slides or sheds from the panel surface.</p>
+                        <p>No washing, coatings, brushes, or active mechanical cleaning are required.</p>
+                        <p><strong>Energy Trade Boundary</strong></p>
+                        <p>Ultrasonic input energy must remain lower than recovered electrical output for the system to be meaningful.</p>
+                        <p>No performance guarantees are asserted.</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Why it exists</h3>
+                        <p>In arid and desert environments, photovoltaic output is often constrained more by particulate fouling and maintenance friction than by available solar irradiance.</p>
+                        <p>Water-based cleaning is costly or impractical, and surface coatings degrade over time.</p>
+                        <p>Ultrasonic Solar explores whether continuous, low-energy mechanical excitation can preserve usable output and reduce maintenance dependency in high-irradiance regions.</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Current state</h3>
+                        <ul>
+                            <li>Early-stage system concept</li>
+                            <li>No integrated prototypes constructed</li>
+                        </ul>
+                        <p>Primary unknowns include:</p>
+                        <p>net energy balance between ultrasonic input and recovered output</p>
+                        <p>long-term material fatigue under continuous vibration</p>
+                        <p>optimal coupling methods and frequency ranges</p>
+                        <p>effectiveness across particle sizes, humidity, and wind conditions</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Constraints</h3>
+                        <p>Ultrasonic Solar is not:</p>
+                        <p>a new photovoltaic chemistry</p>
+                        <p>a cleaning system dependent on water or consumables</p>
+                        <p>a guaranteed efficiency improvement</p>
+                        <p>a sensor-driven optimization platform</p>
+                        <p>Claims are limited to mechanistic plausibility.</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Positioning note</h3>
+                        <p>This is an exploratory energy systems concept, not a near-term product.</p>
+                        <p>Self-cleaning behavior is presented as a secondary effect, not the sole justification.</p>
+                    </div>
+                `
+            },
+            {
+                id: 'muscleos',
+                name: 'muscleOS',
+                descriptor: 'Set-Level Training Measurement System',
+                oneLine: 'Training measurement system capturing perceived effort at completion of each exercise set.',
+                status: 'software',
+                ack: 'analysis view enabled / state: software',
+                content: `
+                    <div class="detail-section">
+                        <h3>What it is</h3>
+                        <p>muscleOS is a training measurement system characterized by the following properties:</p>
+                        <p>set-level</p>
+                        <p>single-gesture input</p>
+                        <p>subjective effort–centric</p>
+                        <p>chronological</p>
+                        <p>The system captures perceived effort at the completion of each exercise set and records it as structured data alongside objective variables.</p>
+                        <p>It does not infer effort.</p>
+                        <p>It records what the user reports, when it matters.</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>How it works</h3>
+                        <p><strong>Set as the Atomic Unit</strong></p>
+                        <p>muscleOS treats the exercise set as the smallest meaningful unit of training data.</p>
+                        <p>Each completed set produces a single structured record.</p>
+                        <p><strong>Single-Gesture Capture</strong></p>
+                        <p>Upon completion of a set, the user records:</p>
+                        <p>repetition count</p>
+                        <p>perceived effort</p>
+                        <p>Both values are captured through a single continuous gesture.</p>
+                        <p>The input may be implemented as:</p>
+                        <p>a two-dimensional vector plane, or</p>
+                        <p>a combined wheel-and-swipe interface</p>
+                        <p>Both write to the same underlying data structure.</p>
+                        <p><strong>Objective Time Measurement</strong></p>
+                        <p>Time variables are measured automatically and require no user input.</p>
+                        <p>These may include:</p>
+                        <p>time under tension during the set</p>
+                        <p>rest duration between consecutive sets</p>
+                        <p>Time is never self-reported.</p>
+                        <p><strong>Chronological Organization</strong></p>
+                        <p>Each set-level record includes:</p>
+                        <p>repetitions</p>
+                        <p>perceived effort</p>
+                        <p>objective time variables</p>
+                        <p>timestamp</p>
+                        <p>Records are stored in chronological order to preserve temporal context.</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Why it exists</h3>
+                        <p>Training adaptation is influenced not only by output, but by how close each set comes to an individual’s limit.</p>
+                        <p>Existing systems either ignore perceived effort or infer it indirectly, often long after the set is completed.</p>
+                        <p>muscleOS captures effort immediately, reduces interaction friction, and preserves subjective experience as structured data suitable for longitudinal analysis.</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Current state</h3>
+                        <ul>
+                            <li>Core interaction model defined</li>
+                            <li>Single-gesture capture mechanism specified</li>
+                            <li>Vector-based review paradigm established</li>
+                            <li>Provisional patent filing prepared</li>
+                        </ul>
+                        <p>No dependency on wearables or external sensors is assumed.</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Failure conditions</h3>
+                        <ul>
+                            <li>Subjective effort input degrades in consistency</li>
+                            <li>Interaction friction interrupts training flow</li>
+                            <li>Longitudinal patterns fail to exceed baseline logging utility</li>
+                        </ul>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Boundary</h3>
+                        <p>muscleOS is not:</p>
+                        <p>a workout content platform</p>
+                        <p>a coaching or motivation system</p>
+                        <p>a recommendation engine</p>
+                        <p>a gamified fitness product</p>
+                        <p>It is a measurement and organization layer for training effort.</p>
+                    </div>
+                `
+            },
+            {
+                id: 'reclaimr',
+                name: 'reclaimr',
+                descriptor: 'Material Market Coordination Layer',
+                oneLine: 'Market-driven coordination layer facilitating discovery, aggregation, and exchange of recyclable materials.',
+                status: 'incubation',
+                ack: 'licensing view enabled / state: incubation',
+                content: `
+                    <div class="detail-section">
+                        <h3>What it is</h3>
+                        <p>reclaimr is a coordination layer for material exchange characterized by the following properties:</p>
+                        <p>market-driven</p>
+                        <p>non-prescriptive</p>
+                        <p>liquidity-focused</p>
+                        <p>failure-visible</p>
+                        <p>The system facilitates discovery, aggregation, and exchange of recyclable materials by coordinating supply and demand rather than optimizing material processing.</p>
+                        <p>It does not guarantee recovery value.</p>
+                        <p>It increases the probability of economically viable exchange.</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>How it works</h3>
+                        <p>Buyer-led demand formation defines material constraints and price parameters.</p>
+                        <p>Distributed supply participation enables heterogeneous supply sources.</p>
+                        <p>Aggregation and matching reduces discovery friction and coordinates exchanges.</p>
+                        <p>Failure visibility surfaces stalled matches as valid system states.</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Why it exists</h3>
+                        <p>Recyclable material is abundant but fragmented.</p>
+                        <p>Coordination failure—not material scarcity—is often the limiting factor in secondary material markets.</p>
+                        <p>reclaimr reduces discovery friction and enables market formation where traditional channels fail to coordinate supply and demand effectively.</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Current state</h3>
+                        <ul>
+                            <li>Market structure defined</li>
+                            <li>Participant roles specified</li>
+                            <li>Demand-first coordination model articulated</li>
+                        </ul>
+                        <p>No active marketplace deployment.</p>
+                        <p>Key unknowns include:</p>
+                        <p>liquidity thresholds by material class</p>
+                        <p>logistics cost dominance</p>
+                        <p>verification requirements across jurisdictions</p>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Failure conditions</h3>
+                        <ul>
+                            <li>Liquidity fails to reach viability thresholds</li>
+                            <li>Logistics costs exceed recovered value</li>
+                            <li>Coordination does not outperform baseline recycling channels</li>
+                        </ul>
+                    </div>
+                    <div class="detail-section">
+                        <h3>Boundary</h3>
+                        <p>reclaimr is not:</p>
+                        <p>a recycling processor</p>
+                        <p>a logistics provider</p>
+                        <p>a sustainability certification platform</p>
+                        <p>a guaranteed recovery mechanism</p>
+                        <p>It is a coordination layer for material exchange.</p>
+                    </div>
+                `
+            }
+        ];
 
-  <!-- ===================== -->
-  <!-- MUSCLEOS -->
-  <!-- ===================== -->
-  <section class="panel project">
-    <h2>muscleOS</h2>
-    <p class="tagline">
-      Set-by-set adaptive training intelligence from subjective effort signals.
-    </p>
+        let selectedProjectId = null;
 
-    <p>
-      muscleOS is a fitness analytics concept that learns from self-reported effort, repetition
-      count, and time to model individualized adaptation patterns over repeated training sessions.
-    </p>
+        function init() {
+            const grid = document.getElementById('projects-grid');
+            projects.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'project-card';
+                card.id = `card-${p.id}`;
+                card.innerHTML = `
+                    <div class="project-name">${p.name}</div>
+                    <div class="project-function">${p.oneLine}</div>
+                    <div class="status-tag">${p.status}</div>
+                    <button class="btn" onclick="openAccessDrawer('${p.id}')">open</button>
+                `;
+                grid.appendChild(card);
+            });
 
-    <details>
-      <summary>Explore in depth</summary>
-      <p>
-        Rather than prescribing programs, muscleOS observes how users experience training.
-        Over time, it identifies patterns between perceived effort, performance decay,
-        and recovery behavior.
-      </p>
-      <p>
-        These learned patterns can be integrated into future training suggestions,
-        load adjustments, or recovery pacing, enabling workouts that improve without
-        rigid programming or external coaching dependency.
-      </p>
-    </details>
-  </section>
+            document.getElementById('submit-access').addEventListener('click', handleAccess);
+            document.getElementById('access-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') handleAccess();
+            });
+        }
 
-  <!-- ===================== -->
-  <!-- R
+        function setView(view, btn) {
+            document.body.classList.remove('view-desktop', 'view-tablet', 'view-mobile');
+            document.body.classList.add(`view-${view}`);
+            setActiveInGroup(btn);
+        }
 
+        function setTheme(theme, btn) {
+            if (theme === 'light') {
+                document.body.classList.add('light-mode');
+            } else {
+                document.body.classList.remove('light-mode');
+            }
+            setActiveInGroup(btn);
+        }
+
+        function setActiveInGroup(btn) {
+            const group = btn.parentElement;
+            group.querySelectorAll('.control-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function openAccessDrawer(id) {
+            selectedProjectId = id;
+            const drawer = document.getElementById('access-drawer');
+            drawer.classList.add('open');
+            document.getElementById('access-input').focus();
+            document.getElementById('invalid-msg').classList.remove('visible');
+        }
+
+        function openCollabDrawer() {
+            const drawer = document.getElementById('collab-drawer');
+            drawer.classList.add('open');
+        }
+
+        function closeDrawer(id) {
+            document.getElementById(id).classList.remove('open');
+            if (id === 'access-drawer') {
+                document.getElementById('access-input').value = '';
+            }
+        }
+
+        function triggerEmail() {
+            window.location.href = "mailto:joe@inexio.io?subject=Neutral Proton Collaboration Inquiry";
+        }
+
+        function handleAccess() {
+            const word = document.getElementById('access-input').value.toLowerCase();
+            if (word === 'go') {
+                closeDrawer('access-drawer');
+                unlockProject(selectedProjectId);
+            } else {
+                document.getElementById('invalid-msg').classList.add('visible');
+            }
+        }
+
+        function unlockProject(id) {
+            const project = projects.find(p => p.id === id);
+            if (!project) return;
+
+            document.querySelectorAll('.project-card').forEach(c => c.classList.remove('active'));
+            document.getElementById(`card-${id}`).classList.add('active');
+
+            const ack = document.getElementById('ack-container');
+            ack.textContent = project.ack;
+            ack.classList.add('visible');
+            setTimeout(() => {
+                ack.classList.remove('visible');
+            }, 1500);
+
+            const container = document.getElementById('content-container');
+            container.innerHTML = `
+                <h2 class="detail-title">${project.name}</h2>
+                <div class="detail-descriptor">${project.descriptor}</div>
+                ${project.content}
+            `;
+
+            window.location.hash = id;
+            scrollToSection('detail-area');
+        }
+
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
